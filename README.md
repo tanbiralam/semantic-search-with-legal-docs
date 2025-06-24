@@ -13,7 +13,8 @@ A powerful Next.js application that provides intelligent semantic search capabil
 
 ## 🏛️Architecture Flow
 
-![image](https://github.com/user-attachments/assets/2867e40b-de57-42be-ab22-e8e097adfec9)
+![image](https://github.com/user-attachments/assets/91f77cc5-0c39-40c2-97aa-2498770bb5f1)
+
 
 This diagram outlines the full process for transforming case PDFs into a searchable vector knowledge base:
 
