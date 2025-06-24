@@ -1,3 +1,5 @@
+"use client";
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -20,11 +22,11 @@ async function pingHealthCheck() {
   }
 }
 
-export const metadata: Metadata = {
-  title: "Legal semantic search",
-  description:
-    "A sample app demonstrating how to use Pinecone and Langchain to build a knowledge base of landmark legal cases and run semantic search over them",
-};
+// export const metadata: Metadata = {
+//   title: "Legal semantic search",
+//   description:
+//     "A sample app demonstrating how to use Pinecone and Langchain to build a knowledge base of landmark legal cases and run semantic search over them",
+// };
 
 export default function RootLayout({
   children,
