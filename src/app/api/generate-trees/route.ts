@@ -14,7 +14,8 @@ export async function POST() {
     const pythonProcess = spawn(pythonCmd, [scriptPath], {
       env: {
         ...process.env,
-        PAGEINDEX_API_KEY: process.env.PAGEINDEX_API_KEY || "",
+        NVIDIA_API_KEY: process.env.NVIDIA_API_KEY || "",
+        OPENAI_API_KEY: process.env.OPENAI_API_KEY || "",
       },
       stdio: ["pipe", "pipe", "pipe"],
     });

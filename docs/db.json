@@ -7,7 +7,8 @@
       "defendant": "Nixon",
       "date": "1974",
       "topic": "Executive Privilege",
-      "outcome": "Ruling against Nixon"
+      "outcome": "Ruling against Nixon",
+      "treeFile": "trees/us_vs_nixon_tree.json"
     },
     {
       "filename": "gibbons_vs_ogden.pdf",
@@ -16,7 +17,8 @@
       "defendant": "Ogden",
       "date": "1824",
       "topic": "Interstate Commerce",
-      "outcome": "Ruling for Gibbons"
+      "outcome": "Ruling for Gibbons",
+      "treeFile": "trees/gibbons_vs_ogden_tree.json"
     },
     {
       "filename": "marbury_vs_madison.pdf",
@@ -25,7 +27,8 @@
       "defendant": "Madison",
       "date": "1803",
       "topic": "Judicial Review",
-      "outcome": "Established judicial review"
+      "outcome": "Established judicial review",
+      "treeFile": "trees/marbury_vs_madison_tree.json"
     },
     {
       "filename": "bush_vs_gore.pdf",
@@ -34,7 +37,8 @@
       "defendant": "Gore",
       "date": "2000",
       "topic": "Winner of 2000 Presidential election",
-      "outcome": "Ruling for Bush"
+      "outcome": "Ruling for Bush",
+      "treeFile": "trees/bush_vs_gore_tree.json"
     },
     {
       "filename": "miranda_vs_arizona.pdf",
@@ -43,7 +47,8 @@
       "defendant": "Arizona",
       "date": "1966",
       "topic": "Right against self-incrimination",
-      "outcome": "Ruling for Miranda"
+      "outcome": "Ruling for Miranda",
+      "treeFile": "trees/miranda_vs_arizona_tree.json"
     },
     {
       "filename": "us_vs_lopez.pdf",
@@ -52,7 +57,8 @@
       "defendant": "Lopez",
       "date": "1995",
       "topic": "Congress's power under the Commerce Clause",
-      "outcome": "Ruling for Lopez"
+      "outcome": "Ruling for Lopez",
+      "treeFile": "trees/us_vs_lopez_tree.json"
     },
     {
       "filename": "gideon_vs_wainwright.pdf",
@@ -61,7 +67,8 @@
       "defendant": "Wainwright",
       "date": "1963",
       "topic": "Right to Counsel",
-      "outcome": "Guaranteed the right to legal counsel"
+      "outcome": "Guaranteed the right to legal counsel",
+      "treeFile": "trees/gideon_vs_wainwright_tree.json"
     },
     {
       "filename": "roper_vs_simmons.pdf",
@@ -70,7 +77,8 @@
       "defendant": "Simmons",
       "date": "2005",
       "topic": "Age Restriction",
-      "outcome": "Ruling against Roper"
+      "outcome": "Ruling against Roper",
+      "treeFile": "trees/roper_vs_simmons_tree.json"
     },
     {
       "filename": "nytimes_vs_us.pdf",
@@ -79,7 +87,8 @@
       "defendant": "United States",
       "date": "1971",
       "topic": "first amendment freedom of the Press",
-      "outcome": "Ruling against the Nixon administration"
+      "outcome": "Ruling against the Nixon administration",
+      "treeFile": "trees/nytimes_vs_us_tree.json"
     },
     {
       "filename": "baker_vs_carr.pdf",
@@ -88,7 +97,8 @@
       "defendant": "Carr",
       "date": "1962",
       "topic": "",
-      "outcome": ""
+      "outcome": "",
+      "treeFile": "trees/baker_vs_carr_tree.json"
     },
     {
       "filename": "mapp_vs_ohio.pdf",
@@ -97,7 +107,8 @@
       "defendant": "Ohio",
       "date": "1961",
       "topic": "Judicial Review",
-      "outcome": "Strengthened Fourth Amendment protections"
+      "outcome": "Strengthened Fourth Amendment protections",
+      "treeFile": "trees/mapp_vs_ohio_tree.json"
     },
     {
       "filename": "dc_vs_heller.pdf",
@@ -106,7 +117,8 @@
       "defendant": "Heller",
       "date": "2008",
       "topic": "Individual firearms rights",
-      "outcome": "Strengthened second Amendment protections"
+      "outcome": "Strengthened second Amendment protections",
+      "treeFile": "trees/dc_vs_heller_tree.json"
     },
     {
       "filename": "tinker_vs_desmoins.pdf",
@@ -115,7 +127,8 @@
       "defendant": "Desmoins",
       "date": "2008",
       "topic": "Student free speech within schools",
-      "outcome": "Strengthened first Amendment protections"
+      "outcome": "Strengthened first Amendment protections",
+      "treeFile": "trees/tinker_vs_desmoins_tree.json"
     }
   ]
 }

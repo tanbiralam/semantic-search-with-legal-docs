@@ -12,9 +12,12 @@ export async function POST(req: Request) {
 
   try {
     const treesDir = path.join(process.cwd(), "docs", "trees");
-    const mappingPath = path.join(treesDir, "_doc_id_mapping.json");
 
-    if (!fs.existsSync(mappingPath)) {
+    // Check that at least one tree file exists
+    if (
+      !fs.existsSync(treesDir) ||
+      !fs.readdirSync(treesDir).some((f) => f.endsWith("_tree.json"))
+    ) {
       return NextResponse.json(
         {
           error:
@@ -24,26 +27,15 @@ export async function POST(req: Request) {
       );
     }
 
-    const docIdMapping: Record<string, string> = JSON.parse(
-      fs.readFileSync(mappingPath, "utf-8")
-    );
-    const docIds = Object.values(docIdMapping).filter(Boolean);
-
-    if (docIds.length === 0) {
-      return NextResponse.json(
-        { error: "No document trees found. Run generate_trees.py first." },
-        { status: 503 }
-      );
-    }
-
-    const pythonInput = JSON.stringify({ query, doc_ids: docIds });
+    // Pass empty doc_ids — deep_search.py will load all trees from the directory
+    const pythonInput = JSON.stringify({ query, doc_ids: [] });
 
     const pythonCmd = process.platform === "win32" ? "python" : "python3";
     const scriptPath = path.join(process.cwd(), "scripts", "deep_search.py");
     const pythonProcess = spawn(pythonCmd, [scriptPath], {
       env: {
         ...process.env,
-        PAGEINDEX_API_KEY: process.env.PAGEINDEX_API_KEY || "",
+        NVIDIA_API_KEY: process.env.NVIDIA_API_KEY || "",
       },
       stdio: ["pipe", "pipe", "pipe"],
     });

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export type SearchMode = "quick" | "deep";
 
@@ -7,6 +7,8 @@ interface SearchFormProps {
   onSearch: (query: string) => void;
   searchMode: SearchMode;
   onModeChange: (mode: SearchMode) => void;
+  initialQuery?: string;
+  showSuggestions?: boolean;
 }
 
 export default function SearchForm({
@@ -14,8 +16,14 @@ export default function SearchForm({
   onSearch,
   searchMode,
   onModeChange,
+  initialQuery = "",
+  showSuggestions = true,
 }: SearchFormProps) {
   const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    setQuery(initialQuery);
+  }, [initialQuery]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,25 +103,27 @@ export default function SearchForm({
         </div>
       </div>
 
-      <div className="space-y-4">
-        <h2 className="text-lg font-medium text-gray-200">
-          Try searching for:
-        </h2>
-        <div className="flex flex-wrap gap-2">
-          {suggestedSearches.map((suggestion, index) => (
-            <button
-              key={index}
-              onClick={() => {
-                setQuery(suggestion);
-                onSearch(suggestion);
-              }}
-              className={`px-4 py-2 bg-gray-800 text-gray-300 rounded-lg border border-gray-700 hover:border-${accentColor}-500 hover:text-${accentColor}-400 transition-colors text-sm`}
-            >
-              {suggestion}
-            </button>
-          ))}
+      {showSuggestions && (
+        <div className="space-y-4">
+          <h2 className="text-lg font-medium text-gray-200">
+            Try searching for:
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {suggestedSearches.map((suggestion, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  setQuery(suggestion);
+                  onSearch(suggestion);
+                }}
+                className={`px-4 py-2 bg-gray-800 text-gray-300 rounded-lg border border-gray-700 hover:border-${accentColor}-500 hover:text-${accentColor}-400 transition-colors text-sm`}
+              >
+                {suggestion}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
