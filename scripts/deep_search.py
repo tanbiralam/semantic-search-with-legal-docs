@@ -38,11 +38,8 @@ DB_PATH_DEFAULT = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "..", "docs", "db.json"
 )
 
-NVIDIA_API_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
-NVIDIA_MODEL = (
-    os.environ.get("NVIDIA_DEEP_SEARCH_MODEL", "").strip()
-    or "meta/llama-3.1-70b-instruct"
-)
+NVIDIA_API_URL = os.environ.get("NVIDIA_API_URL", "").strip()
+NVIDIA_MODEL = os.environ.get("NVIDIA_DEEP_SEARCH_MODEL", "").strip()
 
 
 def emit(data: dict):
@@ -50,7 +47,6 @@ def emit(data: dict):
     print(json.dumps(data, ensure_ascii=False), flush=True)
 
 
-# ── Tree loading ──────────────────────────────────────────────────────────────
 
 def load_all_trees(trees_dir: str) -> list[dict]:
     """Load every tree JSON file found in the trees directory."""
@@ -77,7 +73,6 @@ def load_trees_by_doc_ids(trees_dir: str, doc_ids: list[str]) -> list[dict]:
     for t in all_trees:
         if t.get("doc_id") in doc_ids:
             result.append(t)
-    # If none matched (e.g. IDs mismatch), fall back to all trees
     return result if result else all_trees
 
 
@@ -107,7 +102,6 @@ def gather_relevant_sections(trees: list[dict], max_chars: int = 60000) -> tuple
                     case_title,
                 ))
 
-    # Build context string, respecting max_chars
     context_parts = []
     total = 0
     sources_meta = []
@@ -129,7 +123,6 @@ def gather_relevant_sections(trees: list[dict], max_chars: int = 60000) -> tuple
     return "".join(context_parts), sources_meta
 
 
-# ── NVIDIA streaming ─────────────────────────────────────────────────────────
 
 def run_nvidia_deep_search(query: str, context: str, sources_meta: list[dict]):
     """Stream NVIDIA API answer chunks to stdout as NDJSON."""
@@ -221,7 +214,6 @@ def main():
     query = input_data.get("query", "").strip()
     doc_ids = input_data.get("doc_ids", [])
 
-    # Support legacy tree-path mode too
     tree_paths = input_data.get("trees", [])
     docs_dir_override = input_data.get("docs_dir", "")
 
@@ -231,14 +223,11 @@ def main():
 
     emit({"type": "status", "message": "Analyzing legal documents with AI reasoning..."})
 
-    # Determine trees directory
     trees_dir = TREES_DIR_DEFAULT
     if docs_dir_override:
         trees_dir = os.path.join(docs_dir_override, "trees")
 
-    # Load tree files
     if tree_paths:
-        # Legacy mode: explicit file paths
         trees = []
         for tp in tree_paths:
             try:
@@ -265,14 +254,12 @@ def main():
         "message": f"Loaded {len(trees)} case documents. Reasoning with NVIDIA Llama 3.1 70B...",
     })
 
-    # Build context from trees
     context, sources_meta = gather_relevant_sections(trees)
 
     if not context.strip():
         emit({"type": "error", "message": "No text content found in tree files."})
         return
 
-    # Stream answer via NVIDIA API
     run_nvidia_deep_search(query, context, sources_meta)
 
 

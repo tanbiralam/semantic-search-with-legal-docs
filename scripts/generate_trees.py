@@ -20,20 +20,19 @@ import re
 import sys
 import time
 
-import fitz  # PyMuPDF
+import fitz  
 import requests
 from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env"))
 
-NVIDIA_API_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
-OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
-NVIDIA_MODEL = os.environ.get("NVIDIA_TREE_MODEL", "").strip() or "meta/llama-3.1-70b-instruct"
-OPENAI_MODEL = os.environ.get("OPENAI_TREE_MODEL", "").strip() or "gpt-4o-mini"
-CHUNK_CHAR_LIMIT = 8000  # chars per chunk sent to the LLM
-OVERLAP_PAGES = 1         # number of overlapping pages between chunks
+NVIDIA_API_URL = os.environ.get("NVIDIA_API_URL", "").strip()
+OPENAI_API_URL = os.environ.get("OPENAI_API_URL", "").strip()
+NVIDIA_MODEL = os.environ.get("NVIDIA_TREE_MODEL", "").strip()
+OPENAI_MODEL = os.environ.get("OPENAI_TREE_MODEL", "").strip()
+CHUNK_CHAR_LIMIT = 8000  
+OVERLAP_PAGES = 1         
 
-# ── helpers ───────────────────────────────────────────────────────────────────
 
 
 def load_documents(db_path: str) -> list[dict]:
@@ -103,14 +102,12 @@ def chunk_pages(
         current_chunk.append(page)
         current_size += page_len
 
-    # Don't forget the last chunk
     if current_chunk:
         chunks.append(current_chunk)
 
     return chunks
 
 
-# ── provider setup ────────────────────────────────────────────────────────────
 
 
 def get_llm_providers() -> list[dict]:
@@ -176,7 +173,6 @@ def call_chat_completion(provider: dict, system_prompt: str, user_prompt: str) -
     return data["choices"][0]["message"]["content"]
 
 
-# ── process one chunk ─────────────────────────────────────────────────────────
 
 
 def process_chunk(
@@ -275,7 +271,6 @@ DOCUMENT EXCERPT:
     ]
 
 
-# ── merge & deduplicate sections ──────────────────────────────────────────────
 
 
 def merge_sections(all_sections: list[dict]) -> list[dict]:
@@ -290,16 +285,13 @@ def merge_sections(all_sections: list[dict]) -> list[dict]:
         if page not in seen:
             seen[page] = sec
         else:
-            # Keep the one with more text (more complete)
             if len(sec.get("text", "")) > len(seen[page].get("text", "")):
                 seen[page] = sec
 
-    # Sort by page_index
     merged = sorted(seen.values(), key=lambda s: s["page_index"])
     return merged
 
 
-# ── main tree generation ──────────────────────────────────────────────────────
 
 
 def generate_tree_chunked(
@@ -348,7 +340,6 @@ def generate_tree_chunked(
     return nodes
 
 
-# ── main ──────────────────────────────────────────────────────────────────────
 
 def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -415,7 +406,6 @@ def main():
             fail_count += 1
             continue
 
-        # Build root node wrapping all section nodes (matches PageIndex format)
         tree_data = {
             "doc_id": f"nvidia-{filename.replace('.pdf', '')}",
             "filename": filename,
@@ -438,11 +428,9 @@ def main():
         success_count += 1
         print(f"  ✅ Saved {len(nodes)} sections → {tree_path}\n")
 
-        # Rate-limit between documents
         if i < len(documents):
             time.sleep(5)
 
-    # Update db.json with treeFile paths
     with open(db_path, "w", encoding="utf-8") as f:
         json.dump({"documents": documents}, f, indent=2, ensure_ascii=False)
 
