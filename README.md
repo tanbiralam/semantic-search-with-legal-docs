@@ -9,8 +9,8 @@
 </p>
 
 <p align="center">
-  <a href="#quick-search-pinecone-vector-rag">Quick Search</a> ·
-  <a href="#deep-search-tree-based-legal-reasoning">Deep Search</a> ·
+  <a href="#quick-search">Quick Search</a> ·
+  <a href="#deep-search">Deep Search</a> ·
   <a href="#setup">Setup</a> ·
   <a href="#references">References</a>
 </p>
@@ -24,7 +24,29 @@ A **Next.js 14** application for searching **13 landmark U.S. Supreme Court case
 | **Quick Search** | Pinecone + Voyage AI legal embeddings → fast semantic retrieval                   |
 | **Deep Search**  | PageIndex‑inspired tree index + NVIDIA Llama 3.1 70B → structured legal reasoning |
 
-> **Note** — This repository does not use the hosted PageIndex product directly. Instead it implements the core PageIndex idea locally: convert each long legal PDF into a structured, table‑of‑contents‑like tree, then let the model _reason_ over that structure instead of relying only on vector similarity.
+> [!IMPORTANT]
+> This repository does not use the hosted PageIndex product directly. Instead it implements the core PageIndex idea locally: convert each long legal PDF into a structured, table-of-contents-like tree, then let the model _reason_ over that structure instead of relying only on vector similarity.
+
+---
+
+## In This Article
+
+- [What This Project Does](#what-this-project-does)
+- [Why PageIndex‑Style Retrieval Beats Vector Embeddings for Legal Docs](#why-pageindexstyle-retrieval-beats-vector-embeddings-for-legal-docs)
+- [Architecture](#architecture)
+- [How the Tree Is Built](#how-the-tree-is-built)
+- [Retrieval Pipelines](#retrieval-pipelines)
+- [Legal Cases Corpus](#legal-cases-corpus)
+- [Technology Stack](#technology-stack)
+- [Screenshots](#screenshots)
+- [Setup](#setup)
+- [Running the App](#running-the-app)
+- [API Endpoints](#api-endpoints)
+- [Project Structure](#project-structure)
+- [When To Use Each Mode](#when-to-use-each-mode)
+- [Implementation Notes](#implementation-notes)
+- [References](#references)
+- [License](#license)
 
 ---
 
@@ -169,7 +191,9 @@ Each case gets a JSON structure shaped like a compact legal table of contents:
 
 ## Retrieval Pipelines
 
-### Quick Search: Pinecone Vector RAG
+<a id="quick-search"></a>
+
+### Quick Search — Pinecone Vector RAG
 
 Quick search starts from `POST /api/search`.
 
@@ -182,7 +206,9 @@ Quick search starts from `POST /api/search`.
 
 This is the **fast path** — useful for quick semantic lookup across the corpus.
 
-### Deep Search: Tree‑Based Legal Reasoning
+<a id="deep-search"></a>
+
+### Deep Search — Tree-Based Legal Reasoning
 
 Deep search starts from `POST /api/deep-search`.
 

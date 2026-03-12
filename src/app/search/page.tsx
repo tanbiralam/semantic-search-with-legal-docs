@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import DocumentView from "@/components/DocumentView";
@@ -15,7 +15,7 @@ import {
   handleQuickSearch,
 } from "@/lib/search-client";
 
-export default function SearchPage() {
+function SearchPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isBootstrapping, setIsBootstrapping] = useState(false);
@@ -217,5 +217,21 @@ export default function SearchPage() {
         />
       )}
     </main>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+          <div className="mx-auto flex min-h-screen max-w-7xl items-center justify-center px-4 text-sm text-gray-400 sm:px-6 lg:px-8">
+            Loading search…
+          </div>
+        </main>
+      }
+    >
+      <SearchPageContent />
+    </Suspense>
   );
 }
