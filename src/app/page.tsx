@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import DocumentView from "@/components/DocumentView";
 import { type SearchResult } from "./types/search";
+import { type SearchMode } from "@/components/SearchForm";
 import { LoadingState } from "@/components/LoadingState";
 import { Header } from "@/components/Header";
 import { SearchResults } from "@/components/SearchResults";
+import { DeepSearchResults } from "@/components/DeepSearchResults";
 
 const suggestedSearches = [
   "What are the key elements of judicial review?",
@@ -40,7 +42,7 @@ const checkAndBootstrapIndex = async (
   setIsIndexReady(true);
 };
 
-const handleSearch = async (
+const handleQuickSearch = async (
   query: string,
   setResults: (results: SearchResult[]) => void,
   setIsSearching: (isSearching: boolean) => void
@@ -74,6 +76,8 @@ export default function Home() {
   const [selectedDocument, setSelectedDocument] = useState<SearchResult | null>(
     null
   );
+  const [searchMode, setSearchMode] = useState<SearchMode>("quick");
+  const [deepSearchQuery, setDeepSearchQuery] = useState<string | null>(null);
 
   useEffect(() => {
     checkAndBootstrapIndex(setIsBootstrapping, setIsIndexReady);
@@ -82,6 +86,19 @@ export default function Home() {
   const clearResults = () => {
     setQuery("");
     setResults([]);
+    setDeepSearchQuery(null);
+  };
+
+  const handleSearch = (searchQuery: string) => {
+    if (searchMode === "quick") {
+      handleQuickSearch(searchQuery, setResults, setIsSearching);
+      setQuery(searchQuery);
+      setDeepSearchQuery(null);
+    } else {
+      setDeepSearchQuery(searchQuery);
+      setQuery(searchQuery);
+      setResults([]);
+    }
   };
 
   if (selectedDocument) {
@@ -107,13 +124,17 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen flex flex-col">
           <Header
             suggestedSearches={suggestedSearches}
-            onSearch={(query: string) => {
-              handleSearch(query, setResults, setIsSearching);
-              setQuery(query);
+            onSearch={handleSearch}
+            searchMode={searchMode}
+            onModeChange={(mode) => {
+              setSearchMode(mode);
+              // Clear results when switching mode
+              clearResults();
             }}
           />
 
-          {isSearching && (
+          {/* Quick search loading spinner */}
+          {isSearching && searchMode === "quick" && (
             <div className="flex items-center justify-center space-x-3 mb-8">
               <div className="w-5 h-5 border-3 border-indigo-500 border-t-transparent rounded-full animate-spin" />
               <p className="text-gray-300 font-medium">
@@ -122,7 +143,8 @@ export default function Home() {
             </div>
           )}
 
-          {results.length > 0 && query && (
+          {/* Quick search results */}
+          {searchMode === "quick" && results.length > 0 && query && (
             <SearchResults
               results={results}
               query={query}
@@ -130,6 +152,14 @@ export default function Home() {
               onViewDocument={(doc) => {
                 setSelectedDocument(doc);
               }}
+            />
+          )}
+
+          {/* Deep search results */}
+          {searchMode === "deep" && deepSearchQuery && (
+            <DeepSearchResults
+              query={deepSearchQuery}
+              onClear={clearResults}
             />
           )}
         </div>

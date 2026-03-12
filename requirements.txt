@@ -1,0 +1,4 @@
+pageindex>=0.2.6
+google-genai>=1.0.0
+pymupdf>=1.25.0
+python-dotenv>=1.0.0
